@@ -13,10 +13,10 @@ if __name__ == '__main__':
     # send_mail(
     #     'devops test email',
     #     'This is a test email from DevOps!',
-    #     'it@nuls.io',
+    #     'tz466731927@126.com',
     #     ['tangzheng@nuls.io'],
     # )
-    subject, from_email, to = 'devops test email', 'it@nuls.io', 'tangzheng@nuls.io'
+    subject, from_email, to = 'devops test email', 'tz466731927@126.com', 'tangzheng@nuls.io'
     text_content = 'This is a test email from DevOps! http://127.0.0.1:8000/login'
     html_content = '<p>This is a test email from DevOps! <a href="http://127.0.0.1:8000/login" target=blank>http://127.0.0.1:8000/login</a></p>'
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])

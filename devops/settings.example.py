@@ -143,9 +143,10 @@ STATICFILES_DIRS = [
 # email configure
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.xxxx.com'
-EMAIL_PORT = 25
+EMAIL_PORT = 465
 EMAIL_HOST_USER = 'xx@xxxx.com'
 EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_SSL = True
 
 # 注册有效期天数
 CONFIRM_DAYS = 7
