@@ -16,7 +16,7 @@ class Server(models.Model):
     cpu = models.IntegerField('CPU数量', blank=True, null=True)
     ram = models.IntegerField('内存大小(GB)', blank=True, null=True)
     disk = models.FloatField('磁盘大小(GB)', blank=True, null=True)
-    network_bandwidth = models.CharField('网络带宽', max_length=64, blank=True, null=True)
+    network_bandwidth = models.CharField('网络带宽(Mbps)', max_length=64, blank=True, null=True)
 
     ssh_user = models.TextField('远程登录用户', max_length=256, blank=True, null=True)
     modified_time = models.DateTimeField('最后修改时间', auto_now_add=True)

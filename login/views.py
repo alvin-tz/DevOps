@@ -47,7 +47,7 @@ def index(request):
 
 def login(request):
     if request.session.get('is_login', None):
-        return redirect('/login/index/')
+        return redirect('/assets/')
     if request.method == "POST":
         login_form = forms.UserForm(request.POST)
         # username = request.POST.get('username', None)
@@ -71,7 +71,7 @@ def login(request):
                     request.session['is_login'] = True
                     request.session['user_id'] = user.id
                     request.session['user_name'] = user.name
-                    return redirect('/login/index/')
+                    return redirect('/assets/')
                 else:
                     message = "密码不正确！"
             except:
@@ -85,7 +85,7 @@ def login(request):
 def register(request):
     if request.session.get('is_login', None):
         # 登录状态不允许注册。
-        return redirect('/login/index/')
+        return redirect('/assets/')
     if request.method == "POST":
         register_form = forms.RegisterForm(request.POST)
         message = "请检查填写的内容！"
@@ -128,9 +128,9 @@ def register(request):
 def logout(request):
     if not request.session.get('is_login', None):
         # 如果本来就未登录，也就没有登出一说
-        return redirect('/login/index/')
+        return redirect('/assets/')
     request.session.flush()
-    return redirect("/login/index/")
+    return redirect("/login/")
 
 
 def user_confirm(request):
