@@ -15,15 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from login import views
+from login import views as views
+# from assets import views as assetsviews
 from django.conf.urls import include
+# app_name = 'assets'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.index),
+
+    path('login/index/', views.index),
     path('login/', views.login),
-    path('register/', views.register),
+    path('login/register/', views.register),
     path('logout/', views.logout),
-    path('captcha', include('captcha.urls')),
-    path('confirm/', views.user_confirm),
+    path('login/captcha', include('captcha.urls')),
+    path('login/confirm/', views.user_confirm),
+
+    # path('assets/dashboard/', assetsviews.dashboard, name='dashboard'),
+    # path('assets/index/', assetsviews.index, name='index'),
+    # path('assets/detail/', assetsviews.detail, name='detail'),
+    # path('assets/', assetsviews.dashboard),
+    path('assets/', include('assets.urls'))
 ]

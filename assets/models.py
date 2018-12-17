@@ -10,7 +10,7 @@ class Server(models.Model):
 
     alias = models.CharField('主机别名', max_length=64)
     extranet_IP = models.GenericIPAddressField('外网IP', blank=True, null=True)
-    Intranet_IP = models.GenericIPAddressField('内网IP', blank=True, null=True)
+    intranet_IP = models.GenericIPAddressField('内网IP', blank=True, null=True)
     ssh_port = models.CharField('SSH端口', max_length=16, default=22)
 
     cpu = models.IntegerField('CPU数量', blank=True, null=True)
@@ -19,6 +19,7 @@ class Server(models.Model):
     network_bandwidth = models.CharField('网络带宽', max_length=64, blank=True, null=True)
 
     ssh_user = models.TextField('远程登录用户', max_length=256, blank=True, null=True)
+    modified_time = models.DateTimeField('最后修改时间', auto_now_add=True)
 
     def __str__(self):
         return self.alias
