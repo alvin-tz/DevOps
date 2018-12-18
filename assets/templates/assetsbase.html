@@ -31,14 +31,15 @@
                 <!-- Logo -->
                 <a href="#" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini">DevOps</span>
+                    <span class="logo-mini"><b>NULS</b></span>
                     <!-- logo for regular state and mobile devices -->
                     <span class="logo-lg"><b>DevOps</b></span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top">
                     <!-- Sidebar toggle button-->
-                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+{#                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">#}
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                         <span class="sr-only">Toggle navigation</span>
                     </a>
 
@@ -46,40 +47,73 @@
                         <ul class="nav navbar-nav">
                             <!-- Messages: style can be found in dropdown.less-->
                             <li class="dropdown messages-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="label label-success">4</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">此功能暂缺</li>
-                                </ul>
+{#                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+{#                                    <i class="fa fa-envelope-o"></i>#}
+{#                                    <span class="label label-success">0</span>#}
+{#                                </a>#}
+{#                                <ul class="dropdown-menu">#}
+{#                                    <li class="header">此功能暂缺</li>#}
+{#                                </ul>#}
+                                <a href="/admin/">管理后台</a>
                             </li>
                             <!-- Notifications: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning">10</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">此功能暂缺</li>
-                                </ul>
+{#                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+{#                                    <i class="fa fa-bell-o"></i>#}
+{#                                    <span class="label label-warning">0</span>#}
+{#                                </a>#}
+{#                                <ul class="dropdown-menu">#}
+{#                                    <li class="header">此功能暂缺</li>#}
+{#                                </ul>#}
+                                <a href="/logout/">退出登录</a>
                             </li>
-                            <!-- Tasks: style can be found in dropdown.less -->
-                            <li class="dropdown tasks-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-flag-o"></i>
-                                    <span class="label label-danger">9</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">此功能暂缺</li>
-                                </ul>
-                            </li>
+{#                            <!-- Tasks: style can be found in dropdown.less -->#}
+{#                            <li class="dropdown tasks-menu">#}
+{#                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+{#                                    <i class="fa fa-flag-o"></i>#}
+{#                                    <span class="label label-danger">0</span>#}
+{#                                </a>#}
+{#                                <ul class="dropdown-menu">#}
+{#                                    <li class="header">此功能暂缺</li>#}
+{#                                </ul>#}
+{#                            </li>#}
                             <!-- 用户信息: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="{% static 'dist/img/alvin-160x160.jpg' %}" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">管理员</span>
+                                    <span class="hidden-xs">{{ request.session.user_name }}</span>
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <!-- User image -->
+                                    <li class="user-header">
+                                        <img src="{% static 'dist/img/alvin-160x160.jpg' %}" class="img-circle" alt="User Image">
+                                            <p>{{ request.session.user_name }}</p>
+                                    </li>
+{#                                    <!-- Menu Body -->#}
+{#                                    <li class="user-body">#}
+{#                                        <div class="row">#}
+{#                                            <div class="col-xs-4 text-center">#}
+{#                                                <a href="#">Followers</a>#}
+{#                                            </div>#}
+{#                                            <div class="col-xs-4 text-center">#}
+{#                                                <a href="#">Sales</a>#}
+{#                                            </div>#}
+{#                                            <div class="col-xs-4 text-center">#}
+{#                                                <a href="#">Friends</a>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                        <!-- /.row -->#}
+{#                                    </li>#}
+                                    <!-- Menu Footer-->
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="/admin/login/user/{{ request.session.user_id }}/change/" class="btn btn-default btn-flat">资料</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="/logout/" class="btn btn-default btn-flat">注销</a>
+                                        </div>
+                                    </li>
+                                </ul>
                             </li>
                             <!-- Control Sidebar Toggle Button -->
                         </ul>
@@ -96,7 +130,7 @@
                             <img src="{% static 'dist/img/alvin-160x160.jpg' %}" class="img-circle" alt="User Image">
                         </div>
                         <div class="pull-left info">
-                            <p>Admin</p>
+                            <p>{{ request.session.user_name }}</p>
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>
@@ -146,7 +180,7 @@
                 <div class="pull-right hidden-xs">
                     <b>Version</b> 1.0.0
                 </div>
-                <strong>Copyright &copy; 2017- <a href="http://www.liujiangblog.com" target="_blank">Alvin's DevOps System</a>.</strong> All rights
+                <strong>Copyright &copy; 2018- <a href="http://www.liujiangblog.com" target="_blank">Alvin's DevOps System</a>.</strong> All rights
                 reserved.
             </footer>
 

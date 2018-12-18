@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from assets import models
+from login import models as loginmodels
 
 # Create your views here.
 
@@ -22,6 +23,8 @@ def dashboard(request):
     testnet_rate = round(testnet/total*100)
     develop_rate = round(develop/total*100)
     others_rate = round(others/total*100)
+
+    # user = loginmodels.User.objects.get()
 
     return render(request, 'assets/dashboard.html', locals())
 
