@@ -39,6 +39,7 @@
                                 <tr>
                                     <th>序号</th>
                                     <th>主机别名</th>
+                                    <th>所属环境</th>
                                     <th>外网IP</th>
                                     <th>内网IP</th>
                                     <th>操作系统类型</th>
@@ -53,6 +54,7 @@
                                         <td>{{ forloop.counter }}</td>
                                         <td><a href="{% url 'assets:detail' server.id %}">{{ server.alias }}</a></td>
 {#                                        <td>{{ server.alias }}</td>#}
+                                        <td>{{ server.system }}</td>
                                         <td>{{ server.extranet_IP|default_if_none:"-" }}</td>
                                         <td>{{ server.intranet_IP|default_if_none:"-" }}</td>
                                         <td>{{ server.os_type|default_if_none:"-" }}</td>

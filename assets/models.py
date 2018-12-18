@@ -21,6 +21,8 @@ class Server(models.Model):
     ssh_user = models.TextField('远程登录用户', max_length=256, blank=True, null=True)
     modified_time = models.DateTimeField('最后修改时间', auto_now_add=True)
 
+    system = models.CharField('所属环境', max_length=64, default='others')
+
     def __str__(self):
         return self.alias
 

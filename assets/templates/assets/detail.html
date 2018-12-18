@@ -46,6 +46,7 @@
                             <th>主机别名</th>
                             <th>操作系统类型</th>
                             <th>操作系统版本</th>
+                            <th>所属环境</th>
                             <th>外网IP</th>
                             <th>内网IP</th>
                             <th>CPU数量</th>
@@ -62,6 +63,7 @@
                             <td>{{ server.alias }}</td>
                             <td>{{ server.os_type|default_if_none:"-" }}</td>
                             <td>{{ server.os_release|default_if_none:"-" }}</td>
+                            <td>{{ server.system|default_if_none:"others" }}</td>
                             <td>{{ server.extranet_IP|default_if_none:"-" }}</td>
                             <td>{{ server.intranet_IP|default_if_none:"-" }}</td>
                             <td>{{ server.cpu|default_if_none:"-" }}</td>

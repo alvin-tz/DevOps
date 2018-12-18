@@ -12,7 +12,17 @@ def index(request):
 
 
 def dashboard(request):
-    pass
+    total = models.Server.objects.count()
+    mainnet = models.Server.objects.filter(system='mainnet').count()
+    testnet = models.Server.objects.filter(system='testnet').count()
+    develop = models.Server.objects.filter(system='develop').count()
+    others = models.Server.objects.filter(system='others').count()
+
+    mainnet_rate = round(mainnet/total*100)
+    testnet_rate = round(testnet/total*100)
+    develop_rate = round(develop/total*100)
+    others_rate = round(others/total*100)
+
     return render(request, 'assets/dashboard.html', locals())
 
 
