@@ -12,5 +12,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('index/', views.index, name='index'),
     path('detail/(?P<server_id>[0-9]+)/', views.detail, name='detail'),
+    path('addserver/', views.addserver, name='addserver'),
     path('', views.dashboard),
 ]

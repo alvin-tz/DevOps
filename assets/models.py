@@ -36,3 +36,4 @@ class Server(models.Model):
     class Meta:
         verbose_name = '服务器'
         verbose_name_plural = '服务器'
+        ordering = ["-modified_time"]
