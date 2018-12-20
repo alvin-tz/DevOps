@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from assets import models
 from assets import forms
 from login import models as loginmodels
+from assets import getserverusers
 
 # Create your views here.
 
@@ -38,6 +39,7 @@ def detail(requset, server_id):
     :return:
     """
     server = get_object_or_404(models.Server, id=server_id)
+    # serverusers = get_object_or_404(models.ServerUser, server_id=server_id)
     return render(requset, 'assets/detail.html', locals())
 
 def addserver(request):
