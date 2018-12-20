@@ -1,6 +1,21 @@
 from django.db import models
+import json
 
 # Create your models here.
+
+
+
+# class JSONFiled(models.TextField):
+#     description = "Json"
+#     def to_python(self, value):
+#         v = models.TextField.to_python(self, value)
+#         try:
+#             return  json.loads(v)['v']
+#         except:
+#             pass
+#         return v
+#     def get_prep_value(self, value):
+#         return json.dumps({'v': value})
 
 
 class Server(models.Model):
@@ -20,6 +35,7 @@ class Server(models.Model):
     network_bandwidth = models.CharField(verbose_name='网络带宽(Mbps)', max_length=64, blank=True, null=True)
 
     ssh_user = models.TextField(verbose_name='远程登录用户', max_length=256, blank=True, null=True)
+    # loginstr = JSONFiled()
     modified_time = models.DateTimeField(verbose_name='最后修改时间', auto_now_add=True)
 
     env_choice = (
@@ -37,3 +53,17 @@ class Server(models.Model):
         verbose_name = '服务器'
         verbose_name_plural = '服务器'
         ordering = ["-modified_time"]
+
+
+
+class ServerUser(models.Model):
+    user = models.CharField(max_length=72)
+    password = models.CharField(max_length=128)
+    created_time = models.DateTimeField()
+    modified_time = models.DateTimeField()
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-modified_time']
+        verbose_name = "服务器用户"
+        verbose_name_plural = "服务器用户"
