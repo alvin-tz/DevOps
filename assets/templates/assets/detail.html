@@ -59,7 +59,7 @@
 {#                                <th>{{ serveruser.user }}用户密码</th>#}
 {#                            {% empty %}#}
 {#                            {% endfor %}#}
-                            <th>远程登录用户及密码</th>
+{#                            <th>远程登录用户及密码</th>#}
                             <th>最后修改时间</th>
                         </tr>
                     </thead>
@@ -81,7 +81,7 @@
 {#                                <td>{{ serveruser.password }}</td>#}
 {#                            {% empty %}#}
 {#                            {% endfor %}#}
-                            <td>{{ server.ssh_user|default_if_none:"-" }}</td>
+{#                            <td>{{ server.ssh_user|default_if_none:"-" }}</td>#}
                             <td>{{ server.modified_time|date:"Y/m/d [H:m:s]" }}</td>
                         </tr>
                     </tbody>
@@ -89,6 +89,7 @@
             </div><!-- /.box-body -->
             <div class="box-footer">
                 <i class="fa fa-angle-double-left"></i>&nbsp;&nbsp;<a href="{% url 'assets:index' %}"><strong>返回服务器列表页</strong></a>
+{#                <a class="pull-right" href="{% url 'assets:modify' %}"><strong>修改服务器信息</strong></a>#}
             </div><!-- /.box-footer-->
         </div><!-- /.box -->
     </section><!-- /.content -->

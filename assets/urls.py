@@ -13,5 +13,6 @@ urlpatterns = [
     path('index/', views.index, name='index'),
     path('detail/(?P<server_id>[0-9]+)/', views.detail, name='detail'),
     path('addserver/', views.addserver, name='addserver'),
+    # path('modify/', views.modify, name='modify'),
     path('', views.dashboard),
 ]

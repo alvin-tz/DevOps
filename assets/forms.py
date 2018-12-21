@@ -11,7 +11,8 @@ class AddserverForm(forms.Form):
         ('Linux', 'Linux'),
         ('Windows', 'Windows'),
     )
-    os_type = forms.ChoiceField(label="操作系统类型", choices=os_type_choice)
+    # os_type_choice = ('Linux', 'Windows')
+    os_type = forms.ChoiceField(label="操作系统类型", choices=os_type_choice, widget=forms.Select(attrs={'class': 'form-control'}))
     os_release = forms.CharField(label="操作系统版本", widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     hostname = forms.CharField(label="主机名", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -25,7 +26,7 @@ class AddserverForm(forms.Form):
     disk = forms.FloatField(label="磁盘大小(GB)", widget=forms.TextInput(attrs={'class': 'form-control'}))
     network_bandwidth = forms.IntegerField(label="网络带宽(Mbps)", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    ssh_user = forms.CharField(label="远程登录用户", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # ssh_user = forms.CharField(label="远程登录用户", widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     env_choice = (
         ('mainnet', '主网环境'),
@@ -33,4 +34,10 @@ class AddserverForm(forms.Form):
         ('develop', '开发环境'),
         ('others', '其他环境'),
     )
-    system = forms.ChoiceField(label="所属环境", choices=env_choice)
+    # env_choice = ('其他环境', '主网环境', '测试网环境', '开发环境')
+    system = forms.ChoiceField(label="所属环境", choices=env_choice, initial='others', widget=forms.Select(attrs={'class': 'form-control'}))
+
+
+class AddserverUserForm(forms.Form):
+    user = forms.CharField(label="主机用户名", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label="主机密码", widget=forms.TextInput(attrs={'class': 'form-control'}))

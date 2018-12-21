@@ -1,9 +1,10 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from assets import models
 from assets import forms
 from login import models as loginmodels
-from assets import getserverusers
+# from assets import getserverusers
 
 # Create your views here.
 
@@ -39,12 +40,13 @@ def detail(requset, server_id):
     :return:
     """
     server = get_object_or_404(models.Server, id=server_id)
-    # serverusers = get_object_or_404(models.ServerUser, server_id=server_id)
+    serverusers = models.ServerUser.objects.filter(server_id=server_id)
     return render(requset, 'assets/detail.html', locals())
 
 def addserver(request):
     if request.method == "POST":
         addserver_form = forms.AddserverForm(request.POST)
+        # addserveruser_form = forms.AddserverUserForm(request.POST)
         message = ""
         if addserver_form.is_valid():    # 获取数据
             os_type = addserver_form.cleaned_data['os_type']
@@ -58,7 +60,7 @@ def addserver(request):
             ram = addserver_form.cleaned_data['ram']
             disk = addserver_form.cleaned_data['disk']
             network_bandwidth = addserver_form.cleaned_data['network_bandwidth']
-            ssh_user = addserver_form.cleaned_data['ssh_user']
+            # ssh_user = addserver_form.cleaned_data['ssh_user']
             system = addserver_form.cleaned_data['system']
 
             same_alias = models.Server.objects.filter(alias = alias)
@@ -79,11 +81,14 @@ def addserver(request):
             new_server.ram = ram
             new_server.disk = disk
             new_server.network_bandwidth = network_bandwidth
-            new_server.ssh_user = ssh_user
+            # new_server.ssh_user = ssh_user
             new_server.system = system
 
             new_server.save()
 
-            return render(request, 'assets/addserver.html', locals())
+            # return render(request, 'assets/index.html', locals())
+            return redirect('assets:index')
     addserver_form = forms.AddserverForm()
     return render(request, 'assets/addserver.html', locals())
+
+# def modify(request):
