@@ -26,7 +26,9 @@ class AddserverForm(forms.Form):
     disk = forms.FloatField(label="磁盘大小(GB)", widget=forms.TextInput(attrs={'class': 'form-control'}))
     network_bandwidth = forms.IntegerField(label="网络带宽(Mbps)", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    # ssh_user = forms.CharField(label="远程登录用户", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    ssh_user_root_password = forms.CharField(label="root用户密码", required=False, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    ssh_user_other = forms.CharField(label="其他远程登录用户", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    ssh_user_other_password = forms.CharField(label="其他远程用户密码", required=False, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     env_choice = (
         ('mainnet', '主网环境'),
@@ -38,6 +40,7 @@ class AddserverForm(forms.Form):
     system = forms.ChoiceField(label="所属环境", choices=env_choice, initial='others', widget=forms.Select(attrs={'class': 'form-control'}))
 
 
-class AddserverUserForm(forms.Form):
-    user = forms.CharField(label="主机用户名", widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label="主机密码", widget=forms.TextInput(attrs={'class': 'form-control'}))
+# class AddserverUserForm(forms.Form):
+#     user = forms.CharField(label="主机用户名", widget=forms.TextInput(attrs={'class': 'form-control'}))
+#     password = forms.CharField(label="主机密码", widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # server_id = forms.CharField(label="服务器ID")

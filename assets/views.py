@@ -3,7 +3,8 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from assets import models
 from assets import forms
-from login import models as loginmodels
+# from django.forms import formset_factory
+# from login import models as loginmodels
 # from assets import getserverusers
 
 # Create your views here.
@@ -40,13 +41,14 @@ def detail(requset, server_id):
     :return:
     """
     server = get_object_or_404(models.Server, id=server_id)
-    serverusers = models.ServerUser.objects.filter(server_id=server_id)
+    # serverusers = models.ServerUser.objects.filter(server_id=server_id)
     return render(requset, 'assets/detail.html', locals())
 
 def addserver(request):
     if request.method == "POST":
         addserver_form = forms.AddserverForm(request.POST)
-        # addserveruser_form = forms.AddserverUserForm(request.POST)
+        # addserveruser_formset = formset_factory(forms.AddserverUserForm, extra=5,)
+        # formset = addserveruser_formset(request.POST, prefix="form")
         message = ""
         if addserver_form.is_valid():    # 获取数据
             os_type = addserver_form.cleaned_data['os_type']
@@ -60,10 +62,15 @@ def addserver(request):
             ram = addserver_form.cleaned_data['ram']
             disk = addserver_form.cleaned_data['disk']
             network_bandwidth = addserver_form.cleaned_data['network_bandwidth']
-            # ssh_user = addserver_form.cleaned_data['ssh_user']
+            ssh_user_root_password = addserver_form.cleaned_data['ssh_user_root_password']
+            ssh_user_other = addserver_form.cleaned_data['ssh_user_other']
+            ssh_user_other_password = addserver_form.cleaned_data['ssh_user_other_password']
             system = addserver_form.cleaned_data['system']
 
-            same_alias = models.Server.objects.filter(alias = alias)
+            # user = formset.cleaned_data['user']
+            # password = formset.cleaned_data['password']
+
+            same_alias = models.Server.objects.filter(alias=alias)
             if same_alias:  #主机别名唯一
                 message = "主机别名已经存在，请重新输入！"
                 return render(request, 'assets/addserver.html', locals())
@@ -81,10 +88,20 @@ def addserver(request):
             new_server.ram = ram
             new_server.disk = disk
             new_server.network_bandwidth = network_bandwidth
-            # new_server.ssh_user = ssh_user
+            new_server.ssh_user_root_password = ssh_user_root_password
+            new_server.ssh_user_other = ssh_user_other
+            new_server.ssh_user_other_password = ssh_user_other_password
             new_server.system = system
 
             new_server.save()
+
+            # for row in formset.cleaned_data:
+            #     if row:
+            #         new_serveruser = models.ServerUser()
+            #         new_serveruser.server_id = get_object_or_404(models.Server, alias=new_server.alias).id
+            #         models.ServerUser.objects.create(**row)
+
+                    # new_serveruser.save()
 
             # return render(request, 'assets/index.html', locals())
             return redirect('assets:index')

@@ -23,7 +23,7 @@ def send_email(email, code):
     subject = '来自DevOps系统的注册确认邮件'
     text_content = '''感谢注册DevOps系统！如果你看到这条消息，说明你的邮箱服务器不提供HTML链接功能，请联系管理员！'''
     html_content = '''
-        <p>感谢注册<a href="http://{}/confirm/?code={}" target=blank>DevOps系统</a>！</p>
+        <p>感谢注册<a href="http://{}/login/confirm/?code={}" target=blank>DevOps系统</a>！</p>
         <p>请点击站点链接完成注册确认！</p>
         <p>此链接有效期为{}天</p>
         '''.format(settings.REGISTER_IP, code, settings.CONFIRM_DAYS)

@@ -42,6 +42,7 @@
                                     <div class="alert alert-warning">{{ message }}</div>
                                 {% endif %}
 
+
                                 {% csrf_token %}
 
                                 <div class="form-group">
@@ -88,17 +89,39 @@
                                     {{ addserver_form.network_bandwidth.label_tag }}
                                     {{ addserver_form.network_bandwidth }}
                                 </div>
-{#                                <div class="form-group">#}
-{#                                    {{ addserver_form.ssh_user.label_tag }}#}
-{#                                    {{ addserver_form.ssh_user }}#}
-{#                                </div>#}
+                                <div class="form-group">
+                                    {{ addserver_form.ssh_user_root_password.label_tag }}
+                                    {{ addserver_form.ssh_user_root_password }}
+                                </div>
+                                <div class="form-group">
+                                    {{ addserver_form.ssh_user_other.label_tag }}
+                                    {{ addserver_form.ssh_user_other }}
+                                </div>
+                                <div class="form-group">
+                                    {{ addserver_form.ssh_user_other_password.label_tag }}
+                                    {{ addserver_form.ssh_user_other_password }}
+                                </div>
                                 <div class="form-group">
                                     {{ addserver_form.system.label_tag }}
                                     {{ addserver_form.system }}
                                 </div>
-                                <div class="form-group" id="spots">
-                                    <input type="button" id="adduser" name="adduser" value="增加远程用户">
-                                </div>
+{#                                <div class="form-group" id="spots">#}
+{#                                    <input type="button" id="adduser" class="btn btn-primary" name="adduser" value="增加远程用户">#}
+{#                                </div>#}
+{##}
+{#                                {{ formset.management_form }}#}
+{#                                {% for form in formset %}#}
+{#                                    {% for field in form %}#}
+{#                                    <div class="form-group">#}
+{#                                        {{ field.label_tag }}#}
+{#                                        {{ field }}#}
+{#                                    </div>#}
+{#                                <div class="form-group">#}
+{#                                    {{ form.password.label_tag }}#}
+{#                                    {{ form.password }}#}
+{#                                </div>#}
+{#                                    {% endfor %}#}
+{#                                {% endfor %}#}
 
                                 <button type="reset" class="btn btn-default pull-left">重置</button>
                                 <button type="submit" class="btn btn-primary pull-right">提交</button>
@@ -113,35 +136,51 @@
 
 {% endblock %}
 
-{% block script %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            var spotMax = 30;
-            if($('div.spot').length >= spotMax) {
-                $(obj).hide();
-            }
-            $("input#adduser").click(function(){
-                addSpot(this, spotMax);
-            });
-        });
-
-        function addSpot(obj, sm) {
-            $('div#spots').append(
-                '<div class="spot">' +
-                '<input type="text" name="spot_title" /> ' +
-                '<input type="text" name="spot_url" />  ' +
-                '<input type="button" class="remove" value="Delete" /></div>'
-            )
-            .find("input.remove").click(function(){
-                $(this).parent().remove();
-                $('input#adduser').show();
-            });
-
-            if($('div.spot').length >= sm) {
-                $(obj).hide();
-            }
-        }
-    </script>
+{#{% block script %}#}
+{#    <script type="text/javascript">#}
+{#        $(document).ready(function(){#}
+{#            var spotMax = 5;#}
+{#            if($('div.spot').length >= spotMax) {#}
+{#                $(obj).hide();#}
+{#            }#}
+{#            $("input#adduser").click(function(){#}
+{#                addSpot(this, spotMax);#}
+{#            });#}
+{#        });#}
+{##}
+{#        function addSpot(obj, sm) {#}
+{#            $('div#spots').prepend(#}
+                {#'<div class="spot">' +#}
+                {#'<input type="text" name="spot_title" /> ' +#}
+                {#'<input type="text" name="spot_url" />  ' +#}
+                {#'<input type="button" class="remove" value="Delete" /></div>'#}
+{##}
+{#                '<div class="spot">' +#}
+{#                    '<div class="pull-right">' +#}
+{#                        '<input type="button" class="remove btn btn-danger" value="删除">' +#}
+{#                    '</div>' +#}
+{#                    '<br/>' +#}
+{#                    '<div class="form-group">' +#}
+{#                        '<label for="id_hostname">远程连接用户</label>' +#}
+{#                        '<input type="text" class="form-control" id="user">' +#}
+{#                    '</div>' +#}
+{#                    '<div class="form-group">' +#}
+{#                        '<label for="id_hostname">远程连接用户密码</label>' +#}
+{#                        '<input type="text" class="form-control" id="password">' +#}
+{#                    '</div>' +#}
+{#                '</div>'#}
+{##}
+{#            )#}
+{#            .find("input.remove").click(function(){#}
+{#                $(this).parent().parent().remove();#}
+{#                $('input#adduser').show();#}
+{#            });#}
+{##}
+{#            if($('div.spot').length >= sm) {#}
+{#                $(obj).hide();#}
+{#            }#}
+{#        }#}
+{#    </script>#}
 {#    <!-- SlimScroll -->#}
 {#    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>#}
 {#    <!-- FastClick -->#}
@@ -151,4 +190,4 @@
 {#    <!-- AdminLTE for demo purposes -->#}
 {#    <script src="{% static 'dist/js/demo.js' %}"></script>#}
 {#    <!-- page script -->#}
-{% endblock %}
+{#{% endblock %}#}
