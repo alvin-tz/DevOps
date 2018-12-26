@@ -108,4 +108,61 @@ def addserver(request):
     addserver_form = forms.AddserverForm()
     return render(request, 'assets/addserver.html', locals())
 
-# def modify(request):
+def modify(request, server_id):
+    server = get_object_or_404(models.Server, id=server_id)
+
+    if request.method == "POST":
+        server_form = forms.AddserverForm(request.POST)
+        message = ""
+        if server_form.is_valid():
+            # server.os_type = server_form.cleaned_data['os_type']
+            # server.os_release = server_form.cleaned_data['os_release']
+            # server.hostname = server_form.cleaned_data['hostname']
+            # server.alias = server_form.cleaned_data['alias']
+            # server.extranet_IP = server_form.cleaned_data['extranet_IP']
+            # server.intranet_IP = server_form.cleaned_data['intranet_IP']
+            # server.ssh_port = server_form.cleaned_data['ssh_port']
+            # server.cpu = server_form.cleaned_data['cpu']
+            # server.ram = server_form.cleaned_data['ram']
+            # server.disk = server_form.cleaned_data['disk']
+            # server.network_bandwidth = server_form.cleaned_data['network_bandwidth']
+            # server.ssh_user_root_password = server_form.cleaned_data['ssh_user_root_password']
+            # server.ssh_user_other = server_form.cleaned_data['ssh_user_other']
+            # server.ssh_user_other_password = server_form.cleaned_data['ssh_user_other_password']
+            # server.system = server_form.cleaned_data['system']
+            # server.modified_time =
+            server.os_type = request.POST['os_type']
+            server.os_release = request.POST['os_release']
+            server.hostname = request.POST['hostname']
+            server.alias = request.POST['alias']
+            server.extranet_IP = request.POST['extranet_IP']
+            server.intranet_IP = request.POST['intranet_IP']
+            server.ssh_port = request.POST['ssh_port']
+            server.cpu = request.POST['cpu']
+            server.ram = request.POST['ram']
+            server.disk = request.POST['disk']
+            server.network_bandwidth = request.POST['network_bandwidth']
+            server.ssh_user_root_password = request.POST['ssh_user_root_password']
+            server.ssh_user_other = request.POST['ssh_user_other']
+            server.ssh_user_other_password = request.POST['ssh_user_other_password']
+            server.system = request.POST['system']
+
+            server.save()
+
+            return redirect('assets:detail', server_id=server_id)
+        else:
+            message = "信息有误，请重新填写！"
+            return render(request, 'assets/modify.html', locals())
+    else:
+        # print(server.os_type)
+        server_form = forms.AddserverForm()
+        context = {'server': server, 'server_form': server_form}
+        return render(request, 'assets/modify.html', context)
+
+
+
+def deleteserver(request, server_id):
+    server = models.Server.objects.filter(id=server_id)
+    server.delete()
+    servers = models.Server.objects.all()
+    return render(request, 'assets/index.html', locals())

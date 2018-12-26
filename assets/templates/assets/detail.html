@@ -1,6 +1,6 @@
 {% extends 'assetsbase.html' %}
 {% load staticfiles %}
-{% block title %}服务器详细{% endblock %}
+{% block title %}服务器详情{% endblock %}
 
 {% block css %}
     <!-- Theme style -->
@@ -13,13 +13,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            服务器详细
+            服务器详情
             <small>server info</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{% url 'assets:dashboard' %}"><i class="fa fa-dashboard"></i>主页</a></li>
-            <li><a href="{% url 'assets:index' %}"><i class="fa fa-dashboard"></i>服务器总表</a></li>
-            <li class="active">服务器详细</li>
+            <li><a href="{% url 'assets:index' %}"><i class="fa fa-table"></i>服务器总表</a></li>
+            <li class="active">服务器详情</li>
         </ol>
     </section>
 
@@ -29,6 +29,8 @@
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">服务器：{{ server.alias }}</strong></h3>
+                <a class="btn btn-info" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>
+                <a class="btn btn-warning" href="{% url 'assets:deleteserver' server.id %}"><strong>删除服务器</strong></a>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                         <i class="fa fa-minus"></i>
@@ -55,6 +57,7 @@
                             <th>磁盘大小(GB)</th>
                             <th>网络带宽(Mbps)</th>
                             <th>SSH端口</th>
+                            <th>其他远程登录用户</th>
 {#                            {% for serveruser in serverusers %}#}
 {#                                <th>{{ serveruser.user }}用户密码</th>#}
 {#                            {% empty %}#}
@@ -77,6 +80,7 @@
                             <td>{{ server.disk|default_if_none:"-" }}</td>
                             <td>{{ server.network_bandwidth|default_if_none:"-" }}</td>
                             <td>{{ server.ssh_port|default_if_none:"-" }}</td>
+                            <td>{{ server.ssh_user_other|default_if_none:"-" }}</td>
 {#                            {% for serveruser in serverusers %}#}
 {#                                <td>{{ serveruser.password }}</td>#}
 {#                            {% empty %}#}
@@ -88,8 +92,11 @@
                 </table>
             </div><!-- /.box-body -->
             <div class="box-footer">
-                <i class="fa fa-angle-double-left"></i>&nbsp;&nbsp;<a href="{% url 'assets:index' %}"><strong>返回服务器列表页</strong></a>
-{#                <a class="pull-right" href="{% url 'assets:modify' %}"><strong>修改服务器信息</strong></a>#}
+                <i class="fa fa-angle-double-left"></i>&nbsp;&nbsp;<a class="btn btn-primary" href="{% url 'assets:index' %}"><strong>返回服务器列表页</strong></a>
+{#                <a class="btn btn-primary pull-right" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>#}
+{#                <a class="btn btn-primary pull-right" href="{% url 'assets:deleteserver' server.id %}"><strong>删除服务器</strong></a>#}
+                &nbsp;&nbsp;
+{#                <a class="btn btn-primary pull-right" href="/assets/modify"><strong>修改服务器信息</strong></a>#}
             </div><!-- /.box-footer-->
         </div><!-- /.box -->
     </section><!-- /.content -->

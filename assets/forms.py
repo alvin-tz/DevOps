@@ -24,7 +24,7 @@ class AddserverForm(forms.Form):
     cpu = forms.IntegerField(label="CPU数量", widget=forms.TextInput(attrs={'class': 'form-control'}))
     ram = forms.FloatField(label="内存大小(GB)", widget=forms.TextInput(attrs={'class': 'form-control'}))
     disk = forms.FloatField(label="磁盘大小(GB)", widget=forms.TextInput(attrs={'class': 'form-control'}))
-    network_bandwidth = forms.IntegerField(label="网络带宽(Mbps)", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    network_bandwidth = forms.CharField(label="网络带宽(Mbps)", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     ssh_user_root_password = forms.CharField(label="root用户密码", required=False, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     ssh_user_other = forms.CharField(label="其他远程登录用户", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))

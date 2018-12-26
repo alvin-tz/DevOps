@@ -38,7 +38,8 @@ class Server(models.Model):
     ssh_user_other = models.TextField(verbose_name='其他远程登录用户', max_length=256, blank=True, null=True)
     ssh_user_other_password = models.CharField(verbose_name='其他远程用户密码', max_length=256, blank=True, null=True)
     # loginstr = JSONFiled()
-    modified_time = models.DateTimeField(verbose_name='最后修改时间', auto_now_add=True)
+    created_time = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
+    modified_time = models.DateTimeField(verbose_name='最后修改时间', auto_now=True)
 
     env_choice = (
         ('mainnet', '主网环境'),
