@@ -42,54 +42,136 @@
             </div>
             <div class="box-body">
                 <h4><b>详细信息：</b></h4>
-                <table border="1" class="table table-responsive" style="border-left:3px solid deepskyblue; border-bottom:1px solid deepskyblue">
-                    <thead>
-                        <tr>
-                            <th>主机别名</th>
-                            <th>主机名</th>
-                            <th>操作系统类型</th>
-                            <th>操作系统版本</th>
-                            <th>所属环境</th>
-                            <th>外网IP</th>
-                            <th>内网IP</th>
-                            <th>CPU数量</th>
-                            <th>内存大小(GB)</th>
-                            <th>磁盘大小(GB)</th>
-                            <th>网络带宽(Mbps)</th>
-                            <th>SSH端口</th>
-                            <th>其他远程登录用户</th>
-{#                            {% for serveruser in serverusers %}#}
-{#                                <th>{{ serveruser.user }}用户密码</th>#}
-{#                            {% empty %}#}
-{#                            {% endfor %}#}
-{#                            <th>远程登录用户及密码</th>#}
-                            <th>最后修改时间</th>
-                        </tr>
-                    </thead>
+                <table class="table table-bordered" style="border: 1px solid deepskyblue">
                     <tbody>
                         <tr>
+                            <td><b>主机别名</b></td>
                             <td>{{ server.alias }}</td>
+                        </tr>
+                        <tr>
+                            <td>主机名</td>
                             <td>{{ server.hostname|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>操作系统类型</td>
                             <td>{{ server.os_type|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>操作系统版本</td>
                             <td>{{ server.os_release|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>所属环境</td>
                             <td>{{ server.system|default_if_none:"others" }}</td>
+                        </tr>
+                        <tr>
+                            <td>外网IP</td>
                             <td>{{ server.extranet_IP|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>内网IP</td>
                             <td>{{ server.intranet_IP|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>CPU数量</td>
                             <td>{{ server.cpu|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>内存大小(GB)</td>
                             <td>{{ server.ram|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>磁盘大小(GB)</td>
                             <td>{{ server.disk|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>网络带宽(Mbps)</td>
                             <td>{{ server.network_bandwidth|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>SSH端口</td>
                             <td>{{ server.ssh_port|default_if_none:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <td>其他远程登录用户</td>
                             <td>{{ server.ssh_user_other|default_if_none:"-" }}</td>
-{#                            {% for serveruser in serverusers %}#}
-{#                                <td>{{ serveruser.password }}</td>#}
-{#                            {% empty %}#}
-{#                            {% endfor %}#}
-{#                            <td>{{ server.ssh_user|default_if_none:"-" }}</td>#}
+                        </tr>
+                        <tr>
+                            <td>最后修改时间</td>
                             <td>{{ server.modified_time|date:"Y/m/d [H:m:s]" }}</td>
                         </tr>
                     </tbody>
                 </table>
+{#                <table border="1" class="table table-responsive" style="border-left:3px solid deepskyblue; border-bottom:1px solid deepskyblue">#}
+{#                    <thead>#}
+{#                        <tr>#}
+{#                            <th>主机别名</th>#}
+{#                            <th>主机名</th>#}
+{#                            <th>操作系统类型</th>#}
+{#                            <th>操作系统版本</th>#}
+{#                            <th>所属环境</th>#}
+{#                            <th>外网IP</th>#}
+{#                            <th>内网IP</th>#}
+{#                            <th>CPU数量</th>#}
+{#                            <th>内存大小(GB)</th>#}
+{#                            <th>磁盘大小(GB)</th>#}
+{#                            <th>网络带宽(Mbps)</th>#}
+{#                            <th>SSH端口</th>#}
+{#                            <th>其他远程登录用户</th>#}
+{#                            <th>最后修改时间</th>#}
+{#                        </tr>#}
+{#                    </thead>#}
+{#                    <tbody>#}
+{#                        <tr>#}
+{#                            <td>{{ server.alias }}</td>#}
+{#                            <td>{{ server.hostname|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.os_type|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.os_release|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.system|default_if_none:"others" }}</td>#}
+{#                            <td>{{ server.extranet_IP|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.intranet_IP|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.cpu|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.ram|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.disk|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.network_bandwidth|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.ssh_port|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.ssh_user_other|default_if_none:"-" }}</td>#}
+{#                            <td>{{ server.modified_time|date:"Y/m/d [H:m:s]" }}</td>#}
+{#                        </tr>#}
+{#                    </tbody>#}
+{#                </table>#}
+{#                <table border="1" class="table table-responsive" style="border-left:3px solid deepskyblue; border-bottom:1px solid deepskyblue">#}
+{#                <dl class="dl-horizontal" >#}
+{#                    <dt>主机别名：</dt>#}
+{#                    <dd>{{ server.alias }}</dd>#}
+{#                    <dt>主机名：</dt>#}
+{#                    <dd>{{ server.hostname|default_if_none:"-"  }}</dd>#}
+{#                    <dt>操作系统类型：</dt>#}
+{#                    <dd>{{ server.os_type|default_if_none:"-" }}</dd>#}
+{#                    <dt>操作系统版本：</dt>#}
+{#                    <dd>{{ server.os_release|default_if_none:"-" }}</dd>#}
+{#                    <dt>所属环境：</dt>#}
+{#                    <dd>{{ server.system|default_if_none:"others" }}</dd>#}
+{#                    <dt>外网IP：</dt>#}
+{#                    <dd>{{ server.extranet_IP|default_if_none:"-" }}</dd>#}
+{#                    <dt>内网IP：</dt>#}
+{#                    <dd>{{ server.intranet_IP|default_if_none:"-" }}</dd>#}
+{#                    <dt>CPU数量：</dt>#}
+{#                    <dd>{{ server.cpu|default_if_none:"-" }}</dd>#}
+{#                    <dt>内存大小(GB)：</dt>#}
+{#                    <dd>{{ server.ram|default_if_none:"-" }}</dd>#}
+{#                    <dt>磁盘大小(GB)：</dt>#}
+{#                    <dd>{{ server.disk|default_if_none:"-" }}</dd>#}
+{#                    <dt>网络带宽(Mbps)：</dt>#}
+{#                    <dd>{{ server.network_bandwidth|default_if_none:"-" }}</dd>#}
+{#                    <dt>SSH端口：</dt>#}
+{#                    <dd>{{ server.ssh_port|default_if_none:"-" }}</dd>#}
+{#                    <dt>其他远程登录用户：</dt>#}
+{#                    <dd>{{ server.ssh_user_other|default_if_none:"-" }}</dd>#}
+{#                    <dt>最后修改时间：</dt>#}
+{#                    <dd>{{ server.modified_time|date:"Y/m/d [H:m:s]" }}</dd>#}
+{#                </dl>#}
+{#                </table>#}
             </div><!-- /.box-body -->
             <div class="box-footer">
                 <i class="fa fa-angle-double-left"></i>&nbsp;&nbsp;<a class="btn btn-primary" href="{% url 'assets:index' %}"><strong>返回服务器列表页</strong></a>
