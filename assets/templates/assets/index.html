@@ -43,7 +43,7 @@
                                     <th>所属环境</th>
                                     <th>外网IP</th>
                                     <th>内网IP</th>
-                                    <th>操作系统类型</th>
+                                    <th>操作系统</th>
                                     <th>最后修改时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -61,11 +61,11 @@
                                         <td>{{ server.system }}</td>
                                         <td>{{ server.extranet_IP|default_if_none:"-" }}</td>
                                         <td>{{ server.intranet_IP|default_if_none:"-" }}</td>
-                                        <td>{{ server.os_type|default_if_none:"-" }}</td>
+                                        <td>{{ server.os_release|default_if_none:"-" }}</td>
                                         <td>{{ server.modified_time|date:"Y/m/d [H:m:s]" }}</td>
                                         <td>
-                                            <a type="button" class="btn btn-primary fa fa-edit" href="{% url 'assets:modify' server.id %}"></a>
-                                            <a type="button" class="btn btn-primary fa fa-times" href="{% url 'assets:deleteserver' server.id %}"></a>
+                                            <a type="button" class="btn btn-primary" href="{% url 'assets:modify' server.id %}">修改</a>
+                                            <a type="button" class="btn btn-primary" href="{% url 'assets:deleteserver' server.id %}" onclick=" return confirmd()">删除</a>
                                         </td>
                                     </tr>
                                 {% empty %}

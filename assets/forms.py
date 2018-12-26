@@ -17,8 +17,8 @@ class AddserverForm(forms.Form):
 
     hostname = forms.CharField(label="主机名", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     alias = forms.CharField(label="主机别名", widget=forms.TextInput(attrs={'class': 'form-control'}))
-    extranet_IP = forms.GenericIPAddressField(label="外网IP", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    intranet_IP = forms.GenericIPAddressField(label="内网IP", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    extranet_IP = forms.CharField(label="外网IP", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    intranet_IP = forms.CharField(label="内网IP", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     ssh_port = forms.IntegerField(label="SSH端口", required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     cpu = forms.IntegerField(label="CPU数量", widget=forms.TextInput(attrs={'class': 'form-control'}))

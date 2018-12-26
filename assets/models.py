@@ -25,8 +25,8 @@ class Server(models.Model):
 
     hostname = models.CharField(verbose_name='主机名', max_length=64, blank=True, null=True)
     alias = models.CharField(verbose_name='主机别名', max_length=64)
-    extranet_IP = models.GenericIPAddressField(verbose_name='外网IP', blank=True, null=True)
-    intranet_IP = models.GenericIPAddressField(verbose_name='内网IP', blank=True, null=True)
+    extranet_IP = models.CharField(verbose_name='外网IP', max_length=64, blank=True, null=True)
+    intranet_IP = models.CharField(verbose_name='内网IP', max_length=64, blank=True, null=True)
     ssh_port = models.CharField(verbose_name='SSH端口', max_length=16, default=22)
 
     cpu = models.IntegerField(verbose_name='CPU数量', blank=True, null=True)

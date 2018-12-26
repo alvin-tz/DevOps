@@ -30,7 +30,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">服务器：{{ server.alias }}</strong></h3>
                 <a class="btn btn-info" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>
-                <a class="btn btn-warning" href="{% url 'assets:deleteserver' server.id %}"><strong>删除服务器</strong></a>
+                <a class="btn btn-warning" href="{% url 'assets:deleteserver' server.id %}" onclick="return confirmd()"><strong>删除服务器</strong></a>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                         <i class="fa fa-minus"></i>

@@ -147,7 +147,8 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header">导航栏</li>
-                        <li class="active treeview">
+{#                        <li class="active treeview">#}
+                        <li class="treeview">
                             <a href="/assets/dashboard/">
                                 <i class="fa fa-dashboard"></i> <span>仪表盘</span>
                                 <span class="pull-right-container">
@@ -208,6 +209,17 @@
         <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{% static 'dist/js/demo.js' %}"></script>
+
+        <script type="text/javascript">
+            function confirmd() {
+                var msg = "确定删除该条数据？";
+                if (confirm(msg)==true){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        </script>
 
         {% block script %}{% endblock %}
 
