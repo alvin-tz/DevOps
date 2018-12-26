@@ -64,8 +64,9 @@
                                         <td>{{ server.os_release|default_if_none:"-" }}</td>
                                         <td>{{ server.modified_time|date:"Y/m/d [H:m:s]" }}</td>
                                         <td>
-                                            <a type="button" class="btn btn-primary" href="{% url 'assets:modify' server.id %}">修改</a>
-                                            <a type="button" class="btn btn-primary" href="{% url 'assets:deleteserver' server.id %}" onclick=" return confirmd()">删除</a>
+                                            <a class="btn btn-primary" href="#">连接</a>
+                                            <a class="btn btn-primary" href="{% url 'assets:modify' server.id %}">修改</a>
+                                            <a class="btn btn-primary" href="{% url 'assets:deleteserver' server.id %}" onclick=" return confirmd()">删除</a>
                                         </td>
                                     </tr>
                                 {% empty %}
