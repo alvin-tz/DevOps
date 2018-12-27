@@ -17,4 +17,5 @@ urlpatterns = [
     path('modify/<server_id>', views.modify, name='modify'),
     path('deleteserver/<server_id>', views.deleteserver, name='deleteserver'),
     path('', views.dashboard),
+    path('host/<server_id>/', views.connect, name='connect'),
 ]

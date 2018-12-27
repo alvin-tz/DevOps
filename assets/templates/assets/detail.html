@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+    <!-- Xterm -->
+    <link rel="stylesheet" href="{% static 'plugins/xterm/css/xterm.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -29,7 +31,8 @@
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">服务器：{{ server.alias }}</strong></h3>
-                <a class="btn btn-success" id="webssh" onclick='showhidendiv("msg")'><strong>远程连接服务器</strong></a>
+{#                <a class="btn btn-success" id="webssh" onclick='showhidendiv("msg")'><strong>远程连接服务器</strong></a>#}
+                <a class="btn btn-success" id="webssh" onclick='openTerminal()' href="{% url 'assets:connect' server.id %}"><strong>远程连接服务器</strong></a>
                 <a class="btn btn-info" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>
                 <a class="btn btn-warning" href="{% url 'assets:deleteserver' server.id %}" onclick="return confirmd()"><strong>删除服务器</strong></a>
                 <div class="box-tools pull-right">
@@ -189,8 +192,8 @@
             <div class="box-header with-border">
                 <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">远程连接到服务器{{ server.alias }}</strong></h3>
             </div>
-            <div class="box-body">
-                <a class="btn btn-success">webssh</a>
+            <div class="box-body" id="term">
+{#                <a class="btn btn-success">webssh</a>#}
             </div>
         </div>
     </section>
@@ -199,6 +202,9 @@
 
 
 {% block script %}
+    <!-- Xterm -->
+    <script src="{% static 'plugins/xterm/js/xterm.min.js' %}"></script>
+    <script src="{% static 'plugins/xterm/js/luffy.js' %}"></script>
     <script type="text/javascript">
         function showhidendiv(msg) {
             var sbtitle=document.getElementById(msg);
@@ -208,8 +214,69 @@
                 }
                 {#else {#}
                 {#    sbtitle.style.display='none';#}
-                {#}#}
             }
+        }
+    </script>
+
+    <script>
+        function openTerminal(options) {
+            //创建websocket通道
+            var client = new IronSSHClient();
+            copytext = false;
+
+
+            var term = new Terminal(
+                    {
+                        cols: 80,
+                        rows: 24,
+                        handler: function (key) {
+                            console.log(key);
+                            if (copytext){
+                                client.send(copytext);
+                                copytext = false
+
+                            }
+                            client.send(key);
+
+
+
+                        },
+                        screenKeys: true,
+                        useStyle: true,
+                        cursorBlink: true
+                    });
+            term.open();
+            $('.terminal').detach().appendTo('#term');
+            term.resize(80,24)
+            term.write("开始连接....");
+
+
+            client.connect(
+                    $.extend(options, {
+                                onError: function (error) {
+                                    term.write("错误：" + error + "\r\n");
+                                },
+                                onConnect: function () {
+                                    term.write('\r');
+                                },
+                                onClose: function () {
+                                    term.write("对方断开了连接......");
+                                }, //term.destroy()
+                                onData: function (data) {
+
+                                    if (copytext){
+                                        term.write(copytext);
+                                        copytext = false
+                                    }
+                                    else {
+                                        term.write(data)
+                                    }
+                                }
+                            }
+                    )
+            );
+
+
         }
     </script>
 {% endblock %}
