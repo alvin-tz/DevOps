@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -97,15 +97,6 @@ def addserver(request):
 
             new_server.save()
 
-            # for row in formset.cleaned_data:
-            #     if row:
-            #         new_serveruser = models.ServerUser()
-            #         new_serveruser.server_id = get_object_or_404(models.Server, alias=new_server.alias).id
-            #         models.ServerUser.objects.create(**row)
-
-                    # new_serveruser.save()
-
-            # return render(request, 'assets/index.html', locals())
             return redirect('assets:index')
     addserver_form = forms.AddserverForm()
     return render(request, 'assets/addserver.html', locals())
@@ -117,22 +108,6 @@ def modify(request, server_id):
         server_form = forms.AddserverForm(request.POST)
         message = ""
         if server_form.is_valid():
-            # server.os_type = server_form.cleaned_data['os_type']
-            # server.os_release = server_form.cleaned_data['os_release']
-            # server.hostname = server_form.cleaned_data['hostname']
-            # server.alias = server_form.cleaned_data['alias']
-            # server.extranet_IP = server_form.cleaned_data['extranet_IP']
-            # server.intranet_IP = server_form.cleaned_data['intranet_IP']
-            # server.ssh_port = server_form.cleaned_data['ssh_port']
-            # server.cpu = server_form.cleaned_data['cpu']
-            # server.ram = server_form.cleaned_data['ram']
-            # server.disk = server_form.cleaned_data['disk']
-            # server.network_bandwidth = server_form.cleaned_data['network_bandwidth']
-            # server.ssh_user_root_password = server_form.cleaned_data['ssh_user_root_password']
-            # server.ssh_user_other = server_form.cleaned_data['ssh_user_other']
-            # server.ssh_user_other_password = server_form.cleaned_data['ssh_user_other_password']
-            # server.system = server_form.cleaned_data['system']
-            # server.modified_time =
             server.os_type = request.POST['os_type']
             server.os_release = request.POST['os_release']
             server.hostname = request.POST['hostname']
@@ -172,172 +147,164 @@ def deleteserver(request, server_id):
 
 
 
+from dwebsocket.decorators import accept_websocket, require_websocket
+from django.http import HttpResponse
 
-import gevent
-from gevent.socket import wait_read, wait_write
-import paramiko
-import json
-
-class WSSHBridge:
-    """
-    桥接websocket和SSH的核心类
-    """
-    def __init__(self, websocket, user):
-        self.user = user
-        self._websocket = websocket
-        self._tasks = []
-        self.trans = None
-        self.channel = None
-        self.cptext = ''
-        self.cmd_string = ''
-
-    def open(self, host_ip, port, username=None, password=None):
-        """        建立SSH连接        """
+@accept_websocket
+def connect(request):
+    if not request.is_websocket():
         try:
-            self.trans = paramiko.Transport(host_ip, port)
-            self.trans.start_client()
-            self.trans.auth_password(username=username, password=password)
-            channel = self.trans.open_session()
-            channel.get_pty()
-            self.channel = channel
-        except Exception as e:
-            self._websocket.send(json.dumps({"error": e}))
-            raise
-
-    def _forward_inbound(self, channel):
-        """        正向数据转发，websocket ->  ssh        """
-        try:
-            while True:
-                data = self._websocket.receive()
-
-                if not data:
-                    return
-                data = json.loads(str(data))
-
-                # data["data"] = data["data"] + "2"
-
-                if "data" in data:
-                    self.cmd_string += data["data"]
-                    channel.send(data["data"])
-        finally:
-            self.close()
-
-    def _forward_outbound(self, channel):
-        """        反向数据转发，ssh -> websocket        """
-        try:
-            while True:
-                wait_read(channel.fileno())
-
-                data = channel.recv(65535)
-                if not len(data):
-                    return
-
-                self._websocket.send(json.dumps({"data": data.decode()}))
-        finally:
-            self.close()
-
-    def _bridge(self, channel):
-        """        桥接websocket和ssh        """
-        channel.setblocking(False)
-        channel.settimeout(0.0)
-        self._tasks = [
-            gevent.spawn(self._forward_inbound, channel),
-            gevent.spawn(self._forward_outbound, channel),
-        ]
-        gevent.joinall(self._tasks)
-
-    def close(self):
-        """        结束桥接会话        """
-        gevent.killall(self._tasks, block=True)
-        self._tasks = []
-
-    def shell(self):
-        """        启动一个shell通信界面        """
-        self.channel.invoke_shell()
-        self._bridge(self.channel)
-        self.channel.close()
+            message = request.GET['message']
+            return HttpResponse(message)
+        except:
+            return render(request, 'assets/index.html')
+    else:
+        for message in request.websocket:
+            request.websocket.send(message)
 
 
-@login_required(login_url='/login/')
-def connect(request, server_id):
-    # 如果当前请求,不是websocket请求则退出
-    if not request.environ.get("wsgi.websocket"):
-        return HttpResponse("错误，非websocket请求")
-
-    server = get_object_or_404(models.Server, id=server_id)
-    try:
-        host_ip = server.alias
-    except Exception as e:
-        message = "无效的账户，或者无权访问" + str(e)
-        return HttpResponse("请求主机异常"+message)
-    port = server.ssh_port
-    username = 'root'
-    # password = request.GET['ssh_user_root_password']
-    print(username, request.META.get("REMOTE_ADDR"))
-    message = "来自{remote}的请求 尝试连接 -> {username}@{hostname} <{ip}:{port}>".format(
-        remote=request.META.get("REMOTE_ADDR"),  # 请求地址
-        username=username,
-        hostname=host_ip,
-        ip=host_ip,
-        port=port,
-    )
-
-    bridge = WSSHBridge(request.environ.get('wsgi.websocket'), request.user)
-
-    try:
-        bridge.open(
-            host_ip=host_ip,
-            port=port,
-            username=username,
-            password=server.ssh_user_root_password
-        )
-    except Exception as e:
-        message = '尝试连接{0}的过程中发生错误：\n {1}'.format(host_ip, e)
-        print(message)
-        return HttpResponse("错误！无法建立SSH连接！")
-    print(request.GET.get("copytext"))
-    bridge.shell()
-
-    request.environ.get('wsgi.websocket').close()
-    print('用户断开连接.....')
-    return HttpResponse("200, ok")
+@accept_websocket
+def echo(request):
+    if not request.is_websocket():#判断是不是websocket连接
+        try:#如果是普通的http方法
+            message = request.GET['message']
+            return HttpResponse(message)
+        except:
+            return render(request, 'assets/index.html')
+    else:
+        for message in request.websocket:
+            request.websocket.send(message)#发送消息到客户端
 
 
+# def webssh(request):
+#     return render(request, 'assets/webssh.html')
 
-# def connect_host(request,user_bind_host_id):
-#     # 如果当前请求不是websocket方式，则退出
+
+# import gevent
+# from gevent.socket import wait_read, wait_write
+# import paramiko
+# import json
+#
+# class WSSHBridge:
+#     """
+#     桥接websocket和SSH的核心类
+#     """
+#     def __init__(self, websocket, user):
+#         self.user = user
+#         self._websocket = websocket
+#         self._tasks = []
+#         self.trans = None
+#         self.channel = None
+#         self.cptext = ''
+#         self.cmd_string = ''
+#
+#     def open(self, host_ip, port, username=None, password=None):
+#         """        建立SSH连接        """
+#         try:
+#             self.trans = paramiko.Transport(host_ip, port)
+#             self.trans.start_client()
+#             self.trans.auth_password(username=username, password=password)
+#             channel = self.trans.open_session()
+#             channel.get_pty()
+#             self.channel = channel
+#         except Exception as e:
+#             self._websocket.send(json.dumps({"error": e}))
+#             raise
+#
+#     def _forward_inbound(self, channel):
+#         """        正向数据转发，websocket ->  ssh        """
+#         try:
+#             while True:
+#                 data = self._websocket.receive()
+#
+#                 if not data:
+#                     return
+#                 data = json.loads(str(data))
+#
+#                 # data["data"] = data["data"] + "2"
+#
+#                 if "data" in data:
+#                     self.cmd_string += data["data"]
+#                     channel.send(data["data"])
+#         finally:
+#             self.close()
+#
+#     def _forward_outbound(self, channel):
+#         """        反向数据转发，ssh -> websocket        """
+#         try:
+#             while True:
+#                 wait_read(channel.fileno())
+#
+#                 data = channel.recv(65535)
+#                 if not len(data):
+#                     return
+#
+#                 self._websocket.send(json.dumps({"data": data.decode()}))
+#         finally:
+#             self.close()
+#
+#     def _bridge(self, channel):
+#         """        桥接websocket和ssh        """
+#         channel.setblocking(False)
+#         channel.settimeout(0.0)
+#         self._tasks = [
+#             gevent.spawn(self._forward_inbound, channel),
+#             gevent.spawn(self._forward_outbound, channel),
+#         ]
+#         gevent.joinall(self._tasks)
+#
+#     def close(self):
+#         """        结束桥接会话        """
+#         gevent.killall(self._tasks, block=True)
+#         self._tasks = []
+#
+#     def shell(self):
+#         """        启动一个shell通信界面        """
+#         self.channel.invoke_shell()
+#         self._bridge(self.channel)
+#         self.channel.close()
+#
+#
+# @login_required(login_url='/login/')
+# def connect(request, server_id):
+#     # 如果当前请求,不是websocket请求则退出
 #     if not request.environ.get("wsgi.websocket"):
 #         return HttpResponse("错误，非websocket请求")
+#
+#     server = get_object_or_404(models.Server, id=server_id)
 #     try:
-#         remote_user_bind_host = request.user.account.host_user_binds.get(id=user_bind_host_id)
+#         host_ip = server.alias
 #     except Exception as e:
 #         message = "无效的账户，或者无权访问" + str(e)
 #         return HttpResponse("请求主机异常"+message)
-#     username = remote_user_bind_host.host.ip_addr
-#     print(username,request.META.get("REMOTE_ADDR"))
+#     port = server.ssh_port
+#     username = 'root'
+#     # password = request.GET['ssh_user_root_password']
+#     print(username, request.META.get("REMOTE_ADDR"))
 #     message = "来自{remote}的请求 尝试连接 -> {username}@{hostname} <{ip}:{port}>".format(
-#         remote = request.META.get("REMOTE_ADDR"),# 请求地址
-#         username = remote_user_bind_host.host_user.username,
-#         hostname = remote_user_bind_host.host.hostname,
-#         ip = remote_user_bind_host.host.ip_addr,
-#         port = remote_user_bind_host.host.port,
+#         remote=request.META.get("REMOTE_ADDR"),  # 请求地址
+#         username=username,
+#         hostname=host_ip,
+#         ip=host_ip,
+#         port=port,
 #     )
-#     bridge = WSSHBridge(request.environ.get("wsgi.websocket"),request.user)
+#
+#     bridge = WSSHBridge(request.environ.get('wsgi.websocket'), request.user)
+#
 #     try:
 #         bridge.open(
-#             hostname=remote_user_bind_host.host.ip_addr,
-#             port=remote_user_bind_host.host.port,
-#             username=remote_user_bind_host.host_user.username,
-#             password=remote_user_bind_host.host_user.password,
-#                     )
-#     except Exception as e:
-#         message = "尝试连接{0}的过程中发生错误 ：{1}\n".format(
-#             remote_user_bind_host.host.hostname,e
+#             host_ip=host_ip,
+#             port=port,
+#             username=username,
+#             password=server.ssh_user_root_password
 #         )
+#     except Exception as e:
+#         message = '尝试连接{0}的过程中发生错误：\n {1}'.format(host_ip, e)
 #         print(message)
 #         return HttpResponse("错误！无法建立SSH连接！")
 #     print(request.GET.get("copytext"))
 #     bridge.shell()
-#     request.environ.get("wsgi.websocket").close()
-#     print("用户断开连接....")
-#     return HttpResponse("200,ok")
+#
+#     request.environ.get('wsgi.websocket').close()
+#     print('用户断开连接.....')
+#     return HttpResponse("200, ok")

@@ -1,0 +1,68 @@
+{% extends 'assetsbase.html' %}
+{% load staticfiles %}
+{% block title %}webssh{% endblock %}
+
+{% block css %}
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+    <!-- Xterm -->
+    <link rel="stylesheet" href="{% static 'plugins/xterm/css/xterm.min.css' %}">
+    <style>
+        body {
+            padding-bottom: 30px;
+        }
+
+        .terminal {
+            border: #000 solid 5px;
+            font-family: cursive;
+            font-size: 15px;
+            background: #000;
+            box-shadow: rgba(0, 0, 0, 0.8) 2px 2px 20px;
+        }
+
+        .reverse-video {
+            color: #000;
+            background: #f0f0f0;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="terms"></div>
+{% endblock %}
+
+{% block script %}
+    <!-- Xterm -->
+    <script src="{% static 'plugins/xterm/js/xterm.min.js' %}"></script>
+    <script>
+        var socket = new WebSocket('ws://' + window.location.host + '/ws/');
+
+        socket.onopen = function () {
+
+            var term = new Terminal();
+            term.open(document.getElementById('terms'));
+
+            term.on('data', function (data) {
+                console.log(data);
+                socket.send(data);
+            });
+
+            socket.onmessage = function (msg) {
+                console.log(msg);
+                console.log(msg.data);
+                term.write(msg.data);
+            };
+            socket.onerror = function (e) {
+                console.log(e);
+            };
+
+            socket.onclose = function (e) {
+                console.log(e);
+                term.destroy();
+            };
+        };
+    </script>
+
+{% endblock %}
