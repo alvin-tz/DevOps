@@ -31,6 +31,7 @@ class WebSSH(WebsocketConsumer):
             query_string = self.scope['query_string']
             connet_argv = QueryDict(query_string=query_string, encoding='utf-8')
             server_id = connet_argv.get('server_id')
+            username = connet_argv.get('remote_user')
             width = connet_argv.get('width')
             height = connet_argv.get('height')
 
@@ -41,18 +42,18 @@ class WebSSH(WebsocketConsumer):
 
             host = connect_info.alias
             port = connect_info.ssh_port
-            user = 'root'
+            user = username
             # auth = ''
-            pwd = connect_info.ssh_user_root_password
+            # pwd = connect_info.ssh_user_root_password
             # pkey = ''
 
             # connect_info.delete()
 
-            # if pwd:
+            if user == "root":
             #     # password = base64.b64decode(pwd).decode('utf-8')
-            #     password = pwd
-            # else:
-            #     password = None
+                password = connect_info.ssh_user_root_password
+            else:
+                password = connect_info.ssh_user_other_password
 
             self.ssh = SSH(websocker=self, message=self.message)
             # self.ssh = SSH(websocker=self)
@@ -60,7 +61,7 @@ class WebSSH(WebsocketConsumer):
             self.ssh.connect(
                 host=host,
                 user=user,
-                password=pwd,
+                password=password,
                 port=port,
                 pty_width=width,
                 pty_height=height

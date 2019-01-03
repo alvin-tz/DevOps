@@ -1,7 +1,8 @@
-function post_data(id) {
+function post_data(id, user) {
     var server_id = id;
-    if (server_id !== null) {
-        webssh(server_id)
+    var username = user;
+    if (server_id !== null && username !== null) {
+        webssh(server_id, username)
     }
 }
 
@@ -21,7 +22,7 @@ function get_term_size() {
 }
 
 
-function webssh(server_id) {
+function webssh(server_id, username) {
     var cols = get_term_size().cols;
     var rows = get_term_size().rows;
 
@@ -35,7 +36,7 @@ function webssh(server_id) {
         ),
         protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
         socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') +
-            '/webssh/?' + 'server_id=' + server_id + '&width=' + cols + '&height=' + rows;
+            '/webssh/?' + 'server_id=' + server_id + 'remote_user=' + username + '&width=' + cols + '&height=' + rows;
 
     var sock = new WebSocket(socketURL);
 

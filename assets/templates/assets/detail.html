@@ -37,7 +37,24 @@
         <div class="box" id="serverinfo">
             <div class="box-header with-border">
                 <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">服务器：{{ server.alias }}</strong></h3>
-                <a class="btn btn-success" onclick='post_data({{ server.id }})'><strong>远程连接服务器</strong></a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success"><strong>远程连接服务器</strong></button>
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a onclick='post_data({{ server.id }}, "root")'>root用户</a>
+                        </li>
+                        {% if server.ssh_user_other %}
+                        <li>
+                            <a onclick='post_data({{ server.id }}, "{{ server.ssh_user_other }}")'>{{ server.ssh_user_other }}用户</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+{#                <a class="btn btn-success" onclick='post_data({{ server.id }})'><strong>远程连接服务器</strong></a>#}
                 <a class="btn btn-danger" href="{% url 'assets:detail' server.id %}"><strong>断开远程连接</strong></a>
                 <a class="btn btn-info" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>
                 <a class="btn btn-warning" href="{% url 'assets:deleteserver' server.id %}" onclick="return confirmd()"><strong>删除服务器</strong></a>
@@ -134,15 +151,3 @@
     <script src="{% static 'plugins/xterm/xterm.js' %}"></script>
     <script src="{% static 'plugins/webssh.js' %}"></script>
 {% endblock %}
-
-{#{% block script %}#}
-{#    <!-- SlimScroll -->#}
-{#    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>#}
-{#    <!-- FastClick -->#}
-{#    <script src="{% static 'plugins/fastclick/lib/fastclick.js' %}"></script>#}
-{#    <!-- AdminLTE App -->#}
-{#    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>#}
-{#    <!-- AdminLTE for demo purposes -->#}
-{#    <script src="{% static 'dist/js/demo.js' %}"></script>#}
-{#    <!-- page script -->#}
-{#{% endblock %}#}
