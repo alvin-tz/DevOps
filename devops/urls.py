@@ -31,9 +31,5 @@ urlpatterns = [
     path('login/captcha', include('captcha.urls')),
     path('login/confirm/', views.user_confirm),
 
-    # path('assets/dashboard/', assetsviews.dashboard, name='dashboard'),
-    # path('assets/index/', assetsviews.index, name='index'),
-    # path('assets/detail/', assetsviews.detail, name='detail'),
-    # path('assets/', assetsviews.dashboard),
     path('assets/', include('assets.urls'))
 ]

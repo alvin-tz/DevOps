@@ -8,61 +8,50 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
     <!-- Xterm -->
-    <link rel="stylesheet" href="{% static 'plugins/xterm/css/xterm.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/xterm/xterm.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/xterm/style.css' %}">
     <style>
-        body {
-            padding-bottom: 30px;
-        }
-
-        .terminal {
-            border: #000 solid 5px;
-            font-family: cursive;
-            font-size: 15px;
-            background: #000;
-            box-shadow: rgba(0, 0, 0, 0.8) 2px 2px 20px;
-        }
-
-        .reverse-video {
-            color: #000;
-            background: #f0f0f0;
+        .hide {
+            display: none;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div id="terms"></div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            远程连接
+            <small>webssh</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'assets:dashboard' %}"><i class="fa fa-dashboard"></i>主页</a></li>
+            <li><a href="{% url 'assets:index' %}"><i class="fa fa-table"></i>服务器总表</a></li>
+            <li><a href="{% url 'assets:detail' server.id %}"><i class="fa fa-server"></i>服务器详情</a></li>
+            <li class="active">远程连接</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box" id="webssh">
+            <div class="box-header with-border">
+                <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">远程连接：root@{{ server.alias }}:{{ server.ssh_port }}</strong></h3>
+                <a class="btn btn-success" onclick='post_data({{ server.id }})'><strong>建立连接</strong></a>
+                <a class="btn btn-warning" href="{% url 'assets:detail' server.id %}"><strong>断开连接</strong></a>
+            </div>
+            <div class="box-body">
+                <div id="django-webssh-terminal" class="hide">
+                    <div id="terminal"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block script %}
     <!-- Xterm -->
-    <script src="{% static 'plugins/xterm/js/xterm.min.js' %}"></script>
-    <script>
-        var socket = new WebSocket('ws://' + window.location.host + '/ws/');
-
-        socket.onopen = function () {
-
-            var term = new Terminal();
-            term.open(document.getElementById('terms'));
-
-            term.on('data', function (data) {
-                console.log(data);
-                socket.send(data);
-            });
-
-            socket.onmessage = function (msg) {
-                console.log(msg);
-                console.log(msg.data);
-                term.write(msg.data);
-            };
-            socket.onerror = function (e) {
-                console.log(e);
-            };
-
-            socket.onclose = function (e) {
-                console.log(e);
-                term.destroy();
-            };
-        };
-    </script>
+    <script src="{% static 'plugins/xterm/xterm.js' %}"></script>
+    <script src="{% static 'plugins/webssh.js' %}"></script>
 
 {% endblock %}

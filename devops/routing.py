@@ -7,14 +7,12 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import URLRouter, ProtocolTypeRouter
 from django.urls import path
 
-from .consumers import EchoConsumer
 import websocket
 
 application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
         URLRouter([
             path("webssh/", websocket.WebSSH),
-            path("ws/", EchoConsumer),
         ])
     )
 })

@@ -15,20 +15,6 @@
             display: none;
         }
     </style>
-    <style>
-        .terminal {
-            border: #000 solid 5px;
-            font-family: cursive;
-            font-size: 15px;
-            background: #000;
-            box-shadow: rgba(0, 0, 0, 0.8) 2px 2px 20px;
-        }
-
-        .reverse-video {
-            color: #000;
-            background: #f0f0f0;
-        }
-    </style>
 {% endblock %}
 
 {% block content %}
@@ -48,12 +34,11 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        <div class="box" id="detail">
+        <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"><strong class="btn btn-block btn-primary btn-lg">服务器：{{ server.alias }}</strong></h3>
-{#                <a class="btn btn-success" id="webssh" onclick='showhidendiv("msg")'><strong>远程连接服务器</strong></a>#}
-                <a class="btn btn-success" id="lianjie" onclick='post_data({{ server.id }})' href="#terminal"><strong>远程连接服务器</strong></a>
-{#                <a class="btn btn-success" id="webssh" onclick='openTerminal()' href="{% url 'assets:connect' server.id %}"><strong>远程连接服务器</strong></a>#}
+                <a class="btn btn-success" onclick='post_data({{ server.id }})'><strong>远程连接服务器</strong></a>
+                <a class="btn btn-danger" href="{% url 'assets:detail' server.id %}"><strong>断开远程连接</strong></a>
                 <a class="btn btn-info" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>
                 <a class="btn btn-warning" href="{% url 'assets:deleteserver' server.id %}" onclick="return confirmd()"><strong>删除服务器</strong></a>
                 <div class="box-tools pull-right">
@@ -65,7 +50,7 @@
                     </button>
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body" id="detail">
                 <h4><b>详细信息：</b></h4>
 
                 {% csrf_token %}
@@ -132,36 +117,14 @@
                 </table>
 
             </div><!-- /.box-body -->
+            <div class="box-body" id="django-webssh-terminal" class="hide">
+                <div id="terminal"></div>
+            </div>
             <div class="box-footer">
                 <i class="fa fa-angle-double-left"></i>&nbsp;&nbsp;<a class="btn btn-primary" href="{% url 'assets:index' %}"><strong>返回服务器列表页</strong></a>
-{#                <a class="btn btn-primary pull-right" href="{% url 'assets:modify' server.id %}"><strong>修改服务器信息</strong></a>#}
-{#                <a class="btn btn-primary pull-right" href="{% url 'assets:deleteserver' server.id %}"><strong>删除服务器</strong></a>#}
-                &nbsp;&nbsp;
-{#                <a class="btn btn-primary pull-right" href="/assets/modify"><strong>修改服务器信息</strong></a>#}
             </div><!-- /.box-footer-->
         </div><!-- /.box -->
     </section><!-- /.content -->
-
-    <section class="content">
-{#        <div id="xterm" style="display: none;" class="box">#}
-{#        <div class="box">#}
-{#            <div class="box-header with-border">#}
-{#                <h3 class="box-title"><a><strong class="btn btn-block btn-primary btn-lg">远程连接到服务器{{ server.alias }}</strong></a></h3>#}
-{#            </div>#}
-{#            <input type="text" id="message" value="Hello, World!"/>#}
-{#            <button type="button" id="connect_websocket">连接 websocket</button>#}
-{#            <button type="button" id="send_message">发送 message</button>#}
-{#            <button type="button" id="close_websocket">关闭 websocket</button>#}
-{#            <h1>Received Messages</h1>#}
-{#            <div id="messagecontainer"></div>#}
-{#            <div class="box-body" id="term">#}
-{#                <a class="btn btn-success">webssh</a>#}
-{#            </div>#}
-            <div id="django-webssh-terminal" class="hide">
-                <div id="terminal"></div>
-            </div>
-{#        </div>#}
-    </section>
 
 {% endblock %}
 
@@ -170,147 +133,6 @@
     <!-- Xterm -->
     <script src="{% static 'plugins/xterm/xterm.js' %}"></script>
     <script src="{% static 'plugins/webssh.js' %}"></script>
-    <script src="{% static 'plugins/luffy.js' %}"></script>
-{#    <script>#}
-{#        var socket = new WebSocket('ws://' + window.location.host + '/ws/');#}
-{##}
-{#        socket.onopen = function () {#}
-{##}
-{#            var term = new Terminal();#}
-{#            term.open(document.getElementById('terms'));#}
-{##}
-{#            term.on('data', function (data) {#}
-{#                console.log(data);#}
-{#                socket.send(data);#}
-{#            });#}
-{##}
-{#            socket.onmessage = function (msg) {#}
-{#                console.log(msg);#}
-{#                console.log(msg.data);#}
-{#                term.write(msg.data);#}
-{#            };#}
-{#            socket.onerror = function (e) {#}
-{#                console.log(e);#}
-{#            };#}
-{##}
-{#            socket.onclose = function (e) {#}
-{#                console.log(e);#}
-{#                term.destroy();#}
-{#            };#}
-{#        };#}
-{#    </script>#}
-
-{#    <script type="text/javascript">#}
-{#        $(function () {#}
-{#            $('#connect_websocket').click(function () {#}
-{#                if (window.s) {#}
-{#                    window.s.close()#}
-{#                }#}
-{#                /*创建socket连接*/#}
-{#                var socket = new WebSocket("ws://" + window.location.host + "/echo/");#}
-{#                socket.onopen = function () {#}
-{#                    console.log('WebSocket open');//成功连接上Websocket#}
-{#                };#}
-{#                socket.onmessage = function (e) {#}
-{#                    console.log('message: ' + e.data);//打印出服务端返回过来的数据#}
-{#                    $('#messagecontainer').prepend('<p>' + e.data + '</p>');#}
-{#                };#}
-{#                // Call onopen directly if socket is already open#}
-{#                if (socket.readyState == WebSocket.OPEN) socket.onopen();#}
-{#                    window.s = socket;#}
-{#                });#}
-{#            $('#send_message').click(function () {#}
-{#                //如果未连接到websocket#}
-{#                if (!window.s) {#}
-{#                    alert("websocket未连接.");#}
-{#                } else {#}
-{#                    window.s.send($('#message').val());//通过websocket发送数据#}
-{#                }#}
-{#            });#}
-{#            $('#close_websocket').click(function () {#}
-{#                if (window.s) {#}
-{#                    window.s.close();//关闭websocket#}
-{#                    console.log('websocket已关闭');#}
-{#                }#}
-{#            });#}
-{##}
-{#        });#}
-{#    </script>#}
-
-    <script type="text/javascript">
-        function showhidendiv(msg) {
-            var sbtitle=document.getElementById(msg);
-            if (sbtitle){
-                if (sbtitle.style.display=='none'){
-                    sbtitle.style.display='block';
-                }
-                {#else {#}
-                {#    sbtitle.style.display='none';#}
-            }
-        }
-    </script>
-
-{#    <script>#}
-{#        function openTerminal(options) {#}
-{#            //创建websocket通道#}
-{#            var client = new IronSSHClient();#}
-{#            copytext = false;#}
-{##}
-{##}
-{#            var term = new Terminal(#}
-{#                    {#}
-{#                        cols: 80,#}
-{#                        rows: 24,#}
-{#                        handler: function (key) {#}
-{#                            console.log(key);#}
-{#                            if (copytext){#}
-{#                                client.send(copytext);#}
-{#                                copytext = false#}
-{##}
-{#                            }#}
-{#                            client.send(key);#}
-{##}
-{##}
-{##}
-{#                        },#}
-{#                        screenKeys: true,#}
-{#                        useStyle: true,#}
-{#                        cursorBlink: true#}
-{#                    });#}
-{#            term.open();#}
-{#            $('.terminal').detach().appendTo('#term');#}
-{#            term.resize(80,24)#}
-{#            term.write("开始连接....");#}
-{##}
-{##}
-{#            client.connect(#}
-{#                    $.extend(options, {#}
-{#                                onError: function (error) {#}
-{#                                    term.write("错误：" + error + "\r\n");#}
-{#                                },#}
-{#                                onConnect: function () {#}
-{#                                    term.write('\r');#}
-{#                                },#}
-{#                                onClose: function () {#}
-{#                                    term.write("对方断开了连接......");#}
-{#                                }, //term.destroy()#}
-{#                                onData: function (data) {#}
-{##}
-{#                                    if (copytext){#}
-{#                                        term.write(copytext);#}
-{#                                        copytext = false#}
-{#                                    }#}
-{#                                    else {#}
-{#                                        term.write(data)#}
-{#                                    }#}
-{#                                }#}
-{#                            }#}
-{#                    )#}
-{#            );#}
-{##}
-{##}
-{#        }#}
-{#    </script>#}
 {% endblock %}
 
 {#{% block script %}#}

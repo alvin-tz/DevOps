@@ -11,13 +11,10 @@ app_name = 'assets'
 urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('index/', views.index, name='index'),
-    # path('detail/(?P<server_id>[0-9]+)/', views.detail, name='detail'),
     path('detail/<server_id>/', views.detail, name='detail'),
     path('addserver/', views.addserver, name='addserver'),
     path('modify/<server_id>', views.modify, name='modify'),
     path('deleteserver/<server_id>', views.deleteserver, name='deleteserver'),
     path('', views.dashboard),
-    path('host/<server_id>', views.connect, name='connect'),
-    # path('echo', views.echo),
-    # path('webssh', views.webssh),
+    # path('webssh/<server_id>', views.connect, name='connect'),
 ]
