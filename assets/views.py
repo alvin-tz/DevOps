@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from assets import models
 from assets import forms
 # from django.forms import formset_factory
@@ -11,13 +11,24 @@ from assets import forms
 # Create your views here.
 
 
+# 验证是否登录的装饰器
+def check_login(func):
+    def inner(*args, **kwargs):
+        if not args[0].session.get('is_login', None):
+            args[0].session["path"] = args[0].path
+            return redirect('/login/')
+        return func(*args, **kwargs)
+    return inner
 
+
+@check_login
 def index(request):
 
     servers = models.Server.objects.all()
     return render(request, 'assets/index.html', locals())
 
 
+@check_login
 def dashboard(request):
     total = models.Server.objects.count()
     mainnet = models.Server.objects.filter(system='mainnet').count()
@@ -35,6 +46,7 @@ def dashboard(request):
     return render(request, 'assets/dashboard.html', locals())
 
 
+@check_login
 def detail(requset, server_id):
     """
     以显示服务器类型资产详细为例，安全设备、存储设备、网络设备等参照此例。
@@ -46,6 +58,8 @@ def detail(requset, server_id):
     # serverusers = models.ServerUser.objects.filter(server_id=server_id)
     return render(requset, 'assets/detail.html', locals())
 
+
+@check_login
 def addserver(request):
     if request.method == "POST":
         addserver_form = forms.AddserverForm(request.POST)
@@ -101,6 +115,8 @@ def addserver(request):
     addserver_form = forms.AddserverForm()
     return render(request, 'assets/addserver.html', locals())
 
+
+@check_login
 def modify(request, server_id):
     server = get_object_or_404(models.Server, id=server_id)
 
@@ -138,6 +154,7 @@ def modify(request, server_id):
 
 
 
+@check_login
 def deleteserver(request, server_id):
     server = models.Server.objects.filter(id=server_id)
     server.delete()

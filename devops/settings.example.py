@@ -157,3 +157,5 @@ CONFIRM_DAYS = 7
 
 # 注册确认邮件中链接的网址
 REGISTER_IP = '0.0.0.0:0000'
+
+LOGIN_URL='/login/'
