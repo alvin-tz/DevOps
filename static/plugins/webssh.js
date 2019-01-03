@@ -12,7 +12,7 @@ function get_term_size() {
     var init_height = 17;
 
     var windows_width = $(window).width();
-    var windows_height = $(window).height();
+    var windows_height = $("#serverinfo").height();
 
     return {
         cols: Math.floor(windows_width / init_width),

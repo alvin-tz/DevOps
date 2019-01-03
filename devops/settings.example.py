@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login',
     'captcha',
+    'assets',
+    'channels',
 ]
+
+ASGI_APPLICATION = "devops.routing.application"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
