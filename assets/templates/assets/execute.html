@@ -1,0 +1,59 @@
+{% extends 'assetsbase.html' %}
+{% load staticfiles %}
+{% block title %}执行命令{% endblock %}
+
+{% block css %}
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            执行命令
+            <small>execute command</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'assets:dashboard' %}"><i class="fa fa-dashboard"></i>主页</a></li>
+            <li class="active">执行命令</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">目标机器</h3>
+{#                <div class="box-tools pull-right">#}
+{#                    <div class="has-feedback">#}
+{#                        <input type="text" class="form-control input-sm" placeholder="Search Server">#}
+{#                        <span class="glyphicon glyphicon-search form-control-feedback"></span>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+            <div class="box-body no-padding">
+{#                <div class="mailbox-controls">#}
+{#                    <input type="checkbox">#}
+{#                    <a>全选</a>#}
+{#                </div>#}
+                <table id="servers" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox">
+                                <a>全选</a>
+                            </th>
+                            <th>主机别名</th>
+                            <th>所属环境</th>
+                            <th>外网IP</th>
+                            <th>内网IP</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}
