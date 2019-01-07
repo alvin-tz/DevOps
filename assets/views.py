@@ -164,4 +164,5 @@ def deleteserver(request, server_id):
 
 
 def execute(request):
+    servers = models.Server.objects.all()
     return render(request, 'assets/execute.html', locals())
