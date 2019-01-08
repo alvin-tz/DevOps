@@ -40,7 +40,7 @@ class AddserverForm(forms.Form):
     system = forms.ChoiceField(label="所属环境", choices=env_choice, initial='others', widget=forms.Select(attrs={'class': 'form-control'}))
 
 
-# class AddserverUserForm(forms.Form):
-#     user = forms.CharField(label="主机用户名", widget=forms.TextInput(attrs={'class': 'form-control'}))
+# class ExecuteForm(forms.Form):
+#     servers = forms.CharField(label="执行命令的服务器", widget=forms.TextInput(attrs={'class': 'form-control'}))
 #     password = forms.CharField(label="主机密码", widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # server_id = forms.CharField(label="服务器ID")
+#     server_id = forms.CharField(label="服务器ID")
