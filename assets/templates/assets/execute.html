@@ -27,7 +27,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">目标机器选择</h3>
@@ -76,24 +76,46 @@
                     </div>
                     <div class="box-body">
                         <div class="col-md-12">
-                            <form class="form-register" action="{% url 'assets:addserver' %}" method="post">
+{#                            <form class="form-register" action="{% url 'assets:addserver' %}" method="post">#}
+                            <form class="form-register" id="form-execute" method="POST" action="#" onsubmit="return false">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <label>执行命令的服务器</label>
                                     <textarea type="text" name="servers" class="form-control" id="selectedservers"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>执行命令的用户</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" id="executeuser">
                                 </div>
                                 <div class="form-group">
                                     <label>需要执行的命令</label>
-                                    <textarea type="text" class="form-control"></textarea>
+                                    <textarea type="text" class="form-control" id="executecommand"></textarea>
                                 </div>
 
                                 <button type="reset" class="btn btn-default pull-left">重置</button>
-                                <button type="submit" class="btn btn-primary pull-right">提交</button>
+                                <button type="submit" class="btn btn-primary pull-right" id="submit">提交</button type="submit">
 
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">执行结果</h3>
+        {#                <div class="box-tools pull-right">#}
+        {#                    <div class="has-feedback">#}
+        {#                        <input type="text" class="form-control input-sm" placeholder="Search Server">#}
+        {#                        <span class="glyphicon glyphicon-search form-control-feedback"></span>#}
+        {#                    </div>#}
+        {#                </div>#}
+                    </div>
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea type="text" name="servers" class="form-control" id="result"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,22 +170,33 @@
             setHeight(this);
         });
     </script>
-
-{#    <script>#}
-{#        $("textarea").on("input propertychange", "textarea", function (e) {#}
-{#            var target = e.target;#}
-{#            // 保存初始高度，之后需要重新设置一下初始高度，避免只能增高不能减低。#}
-{#            var dh = $(target).attr('defaultHeight') || 0;#}
-{#            if (!dh) {#}
-{#                dh = target.clientHeight;#}
-{#                $(target).attr('defaultHeight', dh);#}
-{#            }#}
-{##}
-{#            target.style.height = dh +'px';#}
-{#            var clientHeight = target.clientHeight;#}
-{#            var scrollHeight = target.scrollHeight;#}
-{#            if (clientHeight !== scrollHeight) { target.style.height = scrollHeight + 10 + "px";#}
-{#            }#}
-{#        });#}
-{#    </script>#}
+    
+    <script>
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                var selectedservers = $("#selectedservers").val();
+                var executeuser = $("#executeuser").val();
+                var executecommand = $("#executecommand").val();
+                console.log(selectedservers);
+                console.log(executeuser);
+                console.log(executecommand);
+                $.ajax({
+                    type: "POST",
+                    url: "/assets/ajax/execute/",
+                    data: {
+                        "selectedservers":selectedservers,
+                        "executeuser":executeuser,
+                        "executecommand":executecommand,
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        console.log(data);
+                        console.log(data.status);
+                        console.log(data.message);
+                        $('#result').text(data.message);
+                    },
+                });
+            });
+        });
+    </script>
 {% endblock %}

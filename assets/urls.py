@@ -17,5 +17,6 @@ urlpatterns = [
     path('deleteserver/<server_id>', views.deleteserver, name='deleteserver'),
     path('', views.dashboard),
     path('execute/', views.execute, name='execute'),
+    path('ajax/execute/', views.executecommand, name='executecommand'),
     # path('webssh/<server_id>', views.connect, name='connect'),
 ]

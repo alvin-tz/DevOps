@@ -166,3 +166,28 @@ def deleteserver(request, server_id):
 def execute(request):
     servers = models.Server.objects.all()
     return render(request, 'assets/execute.html', locals())
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, JsonResponse
+# import json
+@csrf_exempt
+def executecommand(request):
+    # return_json = {'result': "Hello!"}
+    if request.is_ajax():
+        print(request.body)
+        print(request.POST)
+
+        selectedservers = request.POST.get('selectedservers')
+        executeuser = request.POST.get('executeuser')
+        executecommand = request.POST.get('executecommand')
+
+        if selectedservers == '' or executeuser == '' or executecommand == '':
+            return JsonResponse({'status': 10021, 'message': 'parameter error'})
+
+        message = {
+            "选择的服务器": selectedservers,
+            "执行用户": executeuser,
+            "执行命令": executecommand
+        }
+        return JsonResponse({'status': 200, 'message': message})
