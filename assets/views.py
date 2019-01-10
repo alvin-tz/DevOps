@@ -169,11 +169,10 @@ def execute(request):
 
 
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
-# import json
+from django.http import JsonResponse
+import paramiko
 @csrf_exempt
 def executecommand(request):
-    # return_json = {'result': "Hello!"}
     if request.is_ajax():
         print(request.body)
         print(request.POST)
@@ -185,9 +184,29 @@ def executecommand(request):
         if selectedservers == '' or executeuser == '' or executecommand == '':
             return JsonResponse({'status': 10021, 'message': 'parameter error'})
 
-        message = {
-            "选择的服务器": selectedservers,
-            "执行用户": executeuser,
-            "执行命令": executecommand
-        }
+        servers = selectedservers.split(",")
+        message = {}
+        # print(servers)
+        for i, ip in enumerate(servers):
+            print(ip)
+            server = get_object_or_404(models.Server, alias=ip)
+            trans = paramiko.Transport((ip, int(server.ssh_port)))
+            if executeuser == 'root':
+                trans.connect(username=executeuser, password=server.ssh_user_root_password)
+            elif executeuser == server.ssh_user_other:
+                trans.connect(username=executeuser, password=server.ssh_user_other_password)
+            else:
+                return JsonResponse({'status': 10022, 'message': 'wrong user'})
+
+            try:
+                ssh = paramiko.SSHClient()
+                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                ssh._transport = trans
+                stdin, stdout, stderr = ssh.exec_command(executecommand)
+                message.update({ip: stdout.read().decode()})
+                print(message)
+
+                trans.close()
+            except Exception as e:
+                return JsonResponse({'status': 10023, 'message': e})
         return JsonResponse({'status': 200, 'message': message})

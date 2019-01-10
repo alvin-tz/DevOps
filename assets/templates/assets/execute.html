@@ -113,8 +113,7 @@
                     </div>
                     <div class="box-body">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea type="text" name="servers" class="form-control" id="result"></textarea>
+                            <div class="form-group" id="result">
                             </div>
                         </div>
                     </div>
@@ -143,20 +142,18 @@
         });
         $("#ensure").click(function () {
             var trlist = table.rows().nodes();
-            var jsonstr = "[]";
-            var jsonarray = eval('(' + jsonstr + ')');
+            var serverarray = new Array();
+            var j = 0;
             for (i = 0; i < trlist.length; i++) {
                 var trobj = trlist[i];
                 if (trobj.firstElementChild.firstElementChild.checked) {
                     var server = table.cell(i, 1).data();
-                    jsonarray.push(server);
+                    serverarray[j] = server;
+                    j = j+1;
                 }
             }
-            servers = JSON.stringify(jsonarray);
-            {#console.log(servers);#}
-            {#console.log(JSON.stringify(jsonarray));#}
-            $("#selectedservers").val(servers);
-            {#$("#selectedservers").autosize();#}
+            console.log(serverarray)
+            $("#selectedservers").val(serverarray);
         });
     </script>
 
@@ -180,6 +177,7 @@
                 console.log(selectedservers);
                 console.log(executeuser);
                 console.log(executecommand);
+                var servers = selectedservers.split(",");
                 $.ajax({
                     type: "POST",
                     url: "/assets/ajax/execute/",
@@ -190,10 +188,28 @@
                     },
                     dataType: "json",
                     success: function(data){
-                        console.log(data);
-                        console.log(data.status);
-                        console.log(data.message);
-                        $('#result').text(data.message);
+                        {#console.log(data);#}
+                        {#console.log(data.status);#}
+                        {#console.log(data.message);#}
+                        {#$('#result').text(data.message);#}
+                        $('#result').empty();
+                        if (data.status != 200){
+                            $('#result').append("<pre>" + data.status + data.message + "</pre>");
+                        }
+                        else{
+                            $.each(servers, function (i, server) {
+                                console.log(server);
+                                $('#result').append("<div>" + server + "</div>");
+                                $('#result').append("<pre>" + data.message[server] + "</pre>");
+                            })
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        {#alert(XMLHttpRequest.status);#}
+                        {#alert(XMLHttpRequest.readyState);#}
+                        {#alert(textStatus);#}
+                        $('#result').empty();
+                        $('#result').append("<pre>" + errorThrown + "<br/>" + "错误信息：" + "<br/>" + XMLHttpRequest.responseText + "</pre>");
                     },
                 });
             });
