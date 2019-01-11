@@ -62,7 +62,7 @@
                                 <tr>
                                     <td><input type="checkbox" id="server">&nbsp;{{ forloop.counter }}</td>
 {#                                    <td><a href="{% url 'assets:detail' server.id %}">{{ server.alias }}</a></td>#}
-                                    <td>{{ server.alias }}</td>
+                                    <td><a href="{% url 'assets:detail' server.id %}">{{ server.alias }}</a></td>
                                     <td>{{ server.system }}</td>
                                     <td>{{ server.extranet_IP|default_if_none:"-" }}</td>
                                     <td>{{ server.intranet_IP|default_if_none:"-" }}</td>
@@ -147,7 +147,9 @@
             for (i = 0; i < trlist.length; i++) {
                 var trobj = trlist[i];
                 if (trobj.firstElementChild.firstElementChild.checked) {
-                    var server = table.cell(i, 1).data();
+                    {#console.log(table.cell(i, 1).data().split(">")[1].split("<")[0]);#}
+                    {#var server = table.cell(i, 1).data();#}
+                    var server = table.cell(i, 1).data().split(">")[1].split("<")[0];
                     serverarray[j] = server;
                     j = j+1;
                 }
